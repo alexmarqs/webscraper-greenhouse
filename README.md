@@ -8,7 +8,7 @@ Webscrapper to check if the Green House (energetic candidature) is already avail
 
 ## Tech Stack
 
-- [Vercel](https://vercel.com/) - Serverless Functions (in this case I'm using and Edge Function)
+- [Vercel](https://vercel.com/) - Serverless Functions
 - [Cheerio](https://cheerio.js.org/) - Web scrapping (to parse HTML)
 - [Vercel Cron Jobs](https://vercel.com/blog/cron-jobs) - Cron jobs
 - [Zod](https://zod.dev) - Type validation for the environment variables
