@@ -15,6 +15,7 @@ export const sendTransactionalEmail = async (to: string, subject: string, messag
     from: SENDER_EMAIL_NAME,
     to: to,
     subject: subject,
-    text: message
+    text: message,
+    messageStream: 'outbound'
   });
 };
