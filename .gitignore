@@ -1,0 +1,6 @@
+.vercel
+.vscode
+.env.local
+.env
+vercel.json
+node_modules
