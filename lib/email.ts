@@ -10,12 +10,18 @@ const transport = nodemailer.createTransport(
   })
 );
 
-export const sendTransactionalEmail = async (to: string, subject: string, message: string) => {
+export const sendTransactionalEmail = async (
+  to: string,
+  subject: string,
+  text: string,
+  html?: string
+) => {
   await transport.sendMail({
     from: SENDER_EMAIL_NAME,
     to: to,
     subject: subject,
-    text: message,
+    text: text,
+    html: html,
     messageStream: 'outbound'
   });
 };

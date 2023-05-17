@@ -8,6 +8,7 @@ import { VercelRequest, VercelResponse } from '@vercel/node';
 const handler = async (_request: VercelRequest, response: VercelResponse) => {
   console.log('Starting Cron job!');
 
+  // as I'm using node 18.x, I can use fetch directly without installing any package
   const res = await fetch(WEBSITE_URL);
 
   if (!res.ok) {
@@ -18,13 +19,17 @@ const handler = async (_request: VercelRequest, response: VercelResponse) => {
 
   const $ = cheerioLoad(htmlText);
 
+  const websiteOrigin = new URL(WEBSITE_URL).origin;
+
   const articles =
-    $('#mlkFrame .register.bootstrapScopedWS')
+    $('.register')
       .map((_, el) => {
         const title = $(el).find('.register-title').text();
+        const link = `${websiteOrigin}/${$(el).find('.register-title a').attr('href')}`;
         const description = $(el).find('.register-text').text();
         const date = $(el).find('.register-date').text();
-        return { title, description, date };
+
+        return { title, description, date, link };
       })
       .get() || [];
 
@@ -48,7 +53,9 @@ const handler = async (_request: VercelRequest, response: VercelResponse) => {
 
   const articlesMatched = latestArticles
     .filter(article => scannerKeywordsRegex(KEYWORDS.split(',')).test(combineText(article)))
-    .map(article => article.date);
+    .map(article => {
+      return { date: article.date, link: article.link };
+    });
 
   if (articlesMatched.length > 0) {
     const users = EMAILS_TO_NOTIFY?.split(',') || [];
@@ -56,14 +63,50 @@ const handler = async (_request: VercelRequest, response: VercelResponse) => {
     const promises = users.map(user => {
       const [name, email] = user.split(':');
 
-      const message = `Hi my dear ${name.trim()},\n\nNew articles were found matching your keywords. Please check the articles in the following date(s): ${articlesMatched.join(
-        ', '
-      )}\n\nBest regards,\nThe Nerd from Support team`;
+      const messageText = `Hi my dear ${name.trim()},\n\nNew ${
+        articlesMatched.length
+      } articles were found matching your keywords. Please check the articles in the following date(s): ${articlesMatched
+        .map(article => article.date)
+        .join(', ')}\n\nBest regards,\nThe Nerd from Support team`;
+
+      const articlesMatchedListHtml = articlesMatched
+        .map(article => `<li><a href="${article.link}" target="_blank">${article.date}</a></li>`)
+        .join('');
+
+      const messageHtml = `<html>
+      <head>
+        <style>
+          body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #000;
+          }
+          a {
+            text-decoration: none;
+          }
+          a:hover {
+            text-decoration: underline;
+          }
+        </style>
+      </head>
+      <body>
+      <div>
+        <p>Hi my dear ${name.trim()},</p>
+        <p>New ${
+          articlesMatched.length
+        } articles were found matching your keywords. Please check the following articles:
+        <ul>${articlesMatchedListHtml}</ul></p>
+        <p>Best regards,<br />The Nerd from Support team</p>
+      </div>
+      </body>
+      </html>`;
 
       return sendTransactionalEmail(
         email.trim(),
-        'New articles found matching your keywords',
-        message
+        `New articles ${articlesMatched.length} found matching your keywords`,
+        messageText,
+        messageHtml
       );
     });
 

@@ -6,6 +6,12 @@ Webscrapper to check if the a specific candidature is already available/open.
 
 - `/api/cron/greenhouse` - Web scrapper to check if the Green House is already available, if so, it will send a notification. Pass a request parameter `?API_KEY=<your secret>` to authenticate the request.
 
+## Requirements
+
+- Node.js 18.x
+- Vercel account + package `vercel` installed globally
+- Postmark account
+
 ## Tech Stack
 
 - [Vercel](https://vercel.com/) - Serverless Functions
@@ -25,7 +31,7 @@ TBD
 vercel dev
 ```
 
-You need to have `vercel` installed globally. To expose to the API locally to the outside world,
+To expose to the API locally to the outside world,
 you can use [ngrok](https://ngrok.com/).
 
 ## Deploy to production

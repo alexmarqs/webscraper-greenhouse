@@ -19,5 +19,8 @@
     "nodemailer": "6.9.2",
     "nodemailer-postmark-transport": "5.2.1",
     "zod": "3.21.4"
+  },
+  "engines": {
+    "node": ">=18.x"
   }
 }
