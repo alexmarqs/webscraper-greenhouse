@@ -1,6 +1,6 @@
 # Websrapper Green House API
 
-Webscrapper to check if the Green House (energetic candidature) is already available.
+Webscrapper to check if the a specific candidature is already available/open.
 
 ## API Endpoints
 
