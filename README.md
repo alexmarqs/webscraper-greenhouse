@@ -1,6 +1,6 @@
 # Websrapper Green House API
 
-Webscrapper to check if the a specific candidature is already available/open.
+My wife is checking every week a specific website to check if certain candidatures are already available. This is a very manual and boring task, so I decided to automate it. I will be using a Cron Job to check every week if the candidatures are available, and if so, I will send an email to my wife. It will be running only for a few weeks, after that I will stop it.
 
 ## API Endpoints
 
