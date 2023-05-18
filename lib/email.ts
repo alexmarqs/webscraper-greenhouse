@@ -25,3 +25,50 @@ export const sendTransactionalEmail = async (
     messageStream: 'outbound'
   });
 };
+
+export const generateEmailContent = (
+  name: string,
+  articlesMatched: { date: string; link: string }[]
+) => {
+  const messageText = `Hi my dear ${name.trim()},\n\nNew ${
+    articlesMatched.length
+  } articles were found matching your keywords. Please check the articles in the following date(s): ${articlesMatched
+    .map(article => article.date)
+    .join(', ')}\n\nBest regards,\nThe Nerd from Support team`;
+
+  const articlesMatchedListHtml = articlesMatched
+    .map(article => `<li><a href="${article.link}" target="_blank">${article.date}</a></li>`)
+    .join('');
+
+  const messageHtml = `<html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 16px;
+        line-height: 1.5;
+        color: #000;
+      }
+      a {
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+  <div>
+    <p>Hi my dear ${name},</p>
+    <p>New ${articlesMatched.length} articles were found matching your keywords. Please check the following articles:
+    <ul>${articlesMatchedListHtml}</ul></p>
+    <p>Best regards,<br />The Nerd from Support team</p>
+  </div>
+  </body>
+  </html>`;
+
+  return {
+    text: messageText,
+    html: messageHtml
+  };
+};
