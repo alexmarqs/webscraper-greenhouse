@@ -16,7 +16,7 @@ My wife is checking every week a specific website to check if certain candidatur
 
 - [Vercel](https://vercel.com/) - Serverless Functions
 - [Cheerio](https://cheerio.js.org/) - Web scrapping (to parse HTML)
-- [Vercel Cron Jobs](https://vercel.com/blog/cron-jobs) - Cron jobs
+- [Vercel Cron Jobs](https://vercel.com/blog/cron-jobs) - Cron jobs (alternatives: AWS CloudWatch Events, qstash, inngest, github actions, etc.)
 - [Zod](https://zod.dev) - Type validation for the environment variables
 - [NodeMailer](https://nodemailer.com/about/) - Send emails
 - [Postmark](https://postmarkapp.com/) - Email service (in combination with NodeMailer)
