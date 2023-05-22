@@ -27,7 +27,7 @@ As you can see in the code I'm including as part of the lambda/function the noti
 
 - If one of the emails fails, all the emails will fail. I'm not handling this case, but I could do it quickly by using `Promise.allSettled` and then check if there is any email that failed and retry it;
 - If the number of users is too big the function will timeout or the third party email service will reject requests (due to some rate limits):
-  - I could use dedicated queue system (like AWS SQS) to send the emails in batches + retry the failed ones --> Event Driven Architecture!
+  - I could use dedicated queue system (like AWS SQS, Upstash QStash, ...) to send the emails in batches + retry the failed ones --> Event Driven Architecture!
   - I can send emails in batches (e.g. 10 emails per batch) and then wait for a few seconds before sending the next batch: I can do this by using `Promise.all` and then `setTimeout` to wait for a few seconds before sending the next batch. Or actually wait until it's the previous batch is resolved. To send emails in batch I can use some great packages like `p-queue` or `p-limit`;
 
 ## Run Locally
