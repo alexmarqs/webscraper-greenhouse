@@ -21,6 +21,10 @@ My wife is checking every week a specific website to check if certain candidatur
 - [NodeMailer](https://nodemailer.com/about/) - Send emails
 - [Postmark](https://postmarkapp.com/) - Email service (in combination with NodeMailer)
 
+## Architecture Diagram
+
+![Architecture Diagram](./docs/arch.png)
+
 ## Tecnical Notes
 
 As you can see in the code I'm including as part of the lambda/function the notification mecanism. I'm creating the promises to send the email for each user, and then I'm using `Promise.all` to wait for all the promises to be resolved. This is because I want to send all the emails at the same time, and not one by one. What are the downsides of this approach? Let's see:
