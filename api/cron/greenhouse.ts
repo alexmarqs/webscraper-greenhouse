@@ -4,9 +4,12 @@ import { combineText, scannerKeywordsRegex } from '../../lib/parser';
 import { load as cheerioLoad } from 'cheerio';
 import { generateEmailContent, sendTransactionalEmail } from '../../lib/email';
 import { VercelRequest, VercelResponse } from '@vercel/node';
+import { getLatestArticleCheckedFromCache, setLatestArticleCheckedToCache } from '../../lib/cache';
 
 const handler = async (_request: VercelRequest, response: VercelResponse) => {
   console.log('Starting Cron job!');
+
+  // SCRAPING:
 
   // as I'm using node 18.x, I can use fetch directly without installing any package
   const res = await fetch(WEBSITE_URL);
@@ -16,6 +19,8 @@ const handler = async (_request: VercelRequest, response: VercelResponse) => {
   }
 
   const htmlText = await res.text();
+
+  // PARSING:
 
   const $ = cheerioLoad(htmlText);
 
@@ -34,7 +39,7 @@ const handler = async (_request: VercelRequest, response: VercelResponse) => {
       .get() || [];
 
   const lastArticleDate = articles[0].date;
-  const lastArticleDateInDb: string | undefined = undefined;
+  const lastArticleDateInDb = await getLatestArticleCheckedFromCache();
 
   if (lastArticleDateInDb && lastArticleDate === lastArticleDateInDb) {
     console.log('Cron job done! No new articles found to analyze from the last time the job ran');
@@ -51,36 +56,38 @@ const handler = async (_request: VercelRequest, response: VercelResponse) => {
       })
     : articles;
 
+  // SCANNING:
+
   const articlesMatched = latestArticles
     .filter(article => scannerKeywordsRegex(KEYWORDS.split(',')).test(combineText(article)))
     .map(article => {
       return { date: article.date, link: article.link };
     });
 
-  if (articlesMatched.length > 0) {
-    const users = EMAILS_TO_NOTIFY?.split(',') || [];
+  // update the latest article checked in the cache
+  await setLatestArticleCheckedToCache(lastArticleDate);
 
-    const promises = users.map(user => {
-      const [name, email] = user.split(':');
+  // NOTIFICATION:
 
-      const { text, html } = generateEmailContent(name.trim(), articlesMatched);
+  const users = EMAILS_TO_NOTIFY?.split(',') || [];
 
-      return sendTransactionalEmail(
-        email.trim(),
-        `New articles ${articlesMatched.length} found matching your keywords`,
-        text,
-        html
-      );
-    });
+  const promises = users.map(user => {
+    const [name, email] = user.split(':');
 
-    await Promise.all(promises);
+    const { text, html } = generateEmailContent(name.trim(), articlesMatched);
 
-    console.log('Cron job done! Users were notified!');
-    return response.status(200).send('Users were notified!');
-  }
+    return sendTransactionalEmail(
+      email.trim(),
+      `Keywords green house - ${articlesMatched.length} new articles`,
+      text,
+      html
+    );
+  });
 
-  console.log('Cron job done! No articles matched the keywords');
-  return response.status(200).send('No articles matched the keywords');
+  await Promise.all(promises);
+
+  console.log('Cron job done! Users were notified!');
+  return response.status(200).send('Users were notified!');
 };
 
 export default applyMiddlewares(handler);

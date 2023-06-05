@@ -14,6 +14,7 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
+    "@upstash/redis": "1.21.0",
     "cheerio": "1.0.0-rc.12",
     "escape-string-regexp": "4.0.0",
     "nodemailer": "6.9.2",

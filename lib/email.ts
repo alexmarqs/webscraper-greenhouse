@@ -30,17 +30,21 @@ export const generateEmailContent = (
   name: string,
   articlesMatched: { date: string; link: string }[]
 ) => {
-  const messageText = `Hi my dear ${name.trim()},\n\nNew ${
-    articlesMatched.length
-  } articles were found matching your keywords. Please check the articles in the following date(s): ${articlesMatched
-    .map(article => article.date)
-    .join(', ')}\n\nBest regards,\nThe Nerd from Support team`;
+  let messageText = '';
+  let messageHtml = '';
 
-  const articlesMatchedListHtml = articlesMatched
-    .map(article => `<li><a href="${article.link}" target="_blank">${article.date}</a></li>`)
-    .join('');
+  if (articlesMatched.length > 0) {
+    messageText = `Hi my dear ${name.trim()},\n\nNew ${
+      articlesMatched.length
+    } articles were found matching your keywords. Please check the articles in the following date(s): ${articlesMatched
+      .map(article => article.date)
+      .join(', ')}\n\nBest regards,\nThe Nerd from Support team`;
 
-  const messageHtml = `<html>
+    const articlesMatchedListHtml = articlesMatched
+      .map(article => `<li><a href="${article.link}" target="_blank">${article.date}</a></li>`)
+      .join('');
+
+    messageHtml = `<html>
   <head>
     <style>
       body {
@@ -66,6 +70,35 @@ export const generateEmailContent = (
   </div>
   </body>
   </html>`;
+  } else {
+    messageText = `Hi my dear ${name.trim()},\n\nNo articles were found matching your keywords.\n\nBest regards,\nThe Nerd from Support team`;
+
+    messageHtml = `<html>
+    <head>
+      <style>
+        body {
+          font-family: Arial, Helvetica, sans-serif;
+          font-size: 16px;
+          line-height: 1.5;
+          color: #000;
+        }
+        a {
+          text-decoration: none;
+        }
+        a:hover {
+          text-decoration: underline;
+        }
+      </style>
+    </head>
+    <body>
+    <div>
+      <p>Hi my dear ${name},</p>
+      <p>No articles were found matching your keywords.</p>
+      <p>Best regards,<br />The Nerd from Support team</p>
+    </div>
+    </body>
+    </html>`;
+  }
 
   return {
     text: messageText,
