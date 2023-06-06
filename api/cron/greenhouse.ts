@@ -78,7 +78,9 @@ const handler = async (_request: VercelRequest, response: VercelResponse) => {
 
     return sendTransactionalEmail(
       email.trim(),
-      `Keywords green house - ${articlesMatched.length} new articles`,
+      articlesMatched.length === 0
+        ? 'No articles found matching your keywords'
+        : `Found ${articlesMatched.length} new articles matching your keywords`,
       text,
       html
     );
