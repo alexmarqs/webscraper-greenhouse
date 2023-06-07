@@ -4,17 +4,17 @@ import {
   Cache,
   EmailService,
   UseCase,
-  WebsiteScrappingUseCaseRequest,
-  WebsiteScrappingUseCaseResponse
+  WebsiteScrapingUseCaseRequest,
+  WebsiteScrapingUseCaseResponse
 } from '../types';
 import { load as cheerioLoad } from 'cheerio';
 
-export const makeWebsiteScrappingUseCase = (
+export const makeWebsiteScrapingUseCase = (
   cache: Cache,
   emailService: EmailService
-): UseCase<WebsiteScrappingUseCaseRequest, WebsiteScrappingUseCaseResponse> => {
-  return async (request: WebsiteScrappingUseCaseRequest) => {
-    // SCRAPPING
+): UseCase<WebsiteScrapingUseCaseRequest, WebsiteScrapingUseCaseResponse> => {
+  return async (request: WebsiteScrapingUseCaseRequest) => {
+    // SCRAPING
 
     // as I'm using node 18.x, I can use fetch directly without installing any package
     const res = await fetch(request.url);

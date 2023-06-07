@@ -20,13 +20,13 @@ export type EmailService = {
 // Use cases
 export type UseCase<Request, Response> = (request: Request) => Promise<Response>;
 
-export type WebsiteScrappingUseCaseRequest = {
+export type WebsiteScrapingUseCaseRequest = {
   url: string;
   keywords: string;
   emailsToNotify: string;
 };
 
-export type WebsiteScrappingUseCaseResponse = {
+export type WebsiteScrapingUseCaseResponse = {
   articlesMatched: {
     date: string;
     link: string;

@@ -1,10 +1,10 @@
-# Websrapper Green House API
+# Websraper Green House API
 
 My wife is checking every week a specific website to check if certain candidatures are already available. This is a very manual and boring task, so I decided to automate it. I will be using a Cron Job to check every week if the candidatures are available, and if so, I will send an email to my wife. It will be running only for a few weeks, after that I will stop it.
 
 ## API Endpoints
 
-- `/api/cron/greenhouse` - Web scrapper to check if the Green House is already available, if so, it will send a notification. Pass a request parameter `?API_KEY=<your secret>` to authenticate the request.
+- `/api/cron/greenhouse` - Web scraper to check if the Green House is already available, if so, it will send a notification. Pass a request parameter `?API_KEY=<your secret>` to authenticate the request.
 
 ## Requirements
 
@@ -15,7 +15,7 @@ My wife is checking every week a specific website to check if certain candidatur
 ## Tech Stack
 
 - [Vercel](https://vercel.com/) - Serverless Functions
-- [Cheerio](https://cheerio.js.org/) - Web scrapping (to parse HTML)
+- [Cheerio](https://cheerio.js.org/) - Web scraping (to parse HTML)
 - [Vercel Cron Jobs](https://vercel.com/blog/cron-jobs) - Cron jobs (alternatives: AWS CloudWatch Events, qstash, inngest, github actions, etc.)
 - [Zod](https://zod.dev) - Type validation for the environment variables
 - [NodeMailer](https://nodemailer.com/about/) - Send emails

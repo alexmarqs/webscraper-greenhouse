@@ -3,12 +3,12 @@ import { EMAILS_TO_NOTIFY, KEYWORDS, WEBSITE_URL } from '../../lib/env';
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { emailService } from '../../lib/adapters/email/nodemailer-postmark';
 import { cache } from '../../lib/adapters/cache/upstash';
-import { makeWebsiteScrappingUseCase } from '../../lib/use-cases/makeWebsiteScrappingUseCase';
+import { makeWebsiteScrapingUseCase } from '../../lib/use-cases/makeWebsiteScrapingUseCase';
 
 const handler = async (_request: VercelRequest, response: VercelResponse) => {
   console.log('Starting Cron job!');
 
-  const useCase = makeWebsiteScrappingUseCase(cache, emailService);
+  const useCase = makeWebsiteScrapingUseCase(cache, emailService);
 
   const responseFromUseCase = await useCase({
     url: WEBSITE_URL,

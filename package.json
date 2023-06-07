@@ -2,7 +2,7 @@
   "name": "webscraper-greenhouse",
   "version": "0.0.1",
   "private": true,
-  "description": "Webscrapper Green House API",
+  "description": "Webscraper Green House API",
   "scripts": {
     "local": "vercel dev",
     "deploy:prod": "vercel deploy --prod"
