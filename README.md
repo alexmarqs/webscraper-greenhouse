@@ -48,8 +48,3 @@ you can use [ngrok](https://ngrok.com/).
 ```bash
 vercel deploy --prod
 ```
-
-## Possible TODOs
-
-- [ ] Restructure the code using a clean architecture approach
-- [ ] Add unit tests
